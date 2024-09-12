@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  api:
+    build: .
+    container_name: backend-api
+    ports:
+      - "3000:3000"
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=rootpassword
+      - MYSQL_DATABASE=ecommerce
+    depends_on:
+      - mysql
+    volumes:
+      - ./app:/usr/src/app 
+      
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ecommerce
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ~/mysql_data_certs:/etc/mysql/ssl  
+      - ./my.cnf:/etc/mysql/my.cnf    # Mount custom MySQL configuration file
+
+volumes:
+  db_data:
+
